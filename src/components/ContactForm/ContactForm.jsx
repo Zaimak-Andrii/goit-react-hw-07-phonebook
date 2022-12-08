@@ -1,20 +1,20 @@
 import { Form, Formik, Field, ErrorMessage } from 'formik';
 import { object, string } from 'yup';
+import { ContactFormPropTypes } from './ContactForm.type';
 
-const initialValue = { name: '', phone: '' };
-const ContactSchema = object({
+const initialValue = { name: '', number: '' };
+const contactSchema = object({
   name: string()
     .min(3, ({ min }) => `Name must be at least ${min} characters`)
     .max(30, ({ max }) => `Name must be at most ${max} characters`)
     .matches(
-      "^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$",
+      /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/,
       'Name may contain only letters, apostrophe, dash and spaces.'
     )
     .required('Name is a required'),
-  phone: string()
+  number: string()
     .matches(
-      // FIXME: Виправити регулярний вираз
-      '+?d{1,4}?[-.s]?(?d{1,3}?)?[-.s]?d{1,4}[-.s]?d{1,4}[-.s]?d{1,9}',
+      /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/,
       'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +'
     )
     .required('Phone is a required'),
@@ -25,7 +25,7 @@ export default function ContactForm({ onSubmit }) {
   return (
     <Formik
       initialValues={initialValue}
-      validationSchema={ContactSchema}
+      validationSchema={contactSchema}
       onSubmit={(values, actions) => {
         onSubmit(values);
         actions.resetForm();
@@ -46,14 +46,16 @@ export default function ContactForm({ onSubmit }) {
           Phone number
           <Field
             type="tel"
-            name="phone"
+            name="number"
             placeholder="Phone number"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           />
-          <ErrorMessage name="phone" />
+          <ErrorMessage name="number" />
         </label>
         <button type="submit">Add contact</button>
       </Form>
     </Formik>
   );
 }
+
+ContactForm.propTypes = ContactFormPropTypes;

@@ -6,6 +6,8 @@ import { MainHeader, SubHeader } from './Typography';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid';
+import ContactList from './ContactList';
+import Filter from './Filter';
 
 export default class App extends Component {
   state = {
@@ -18,7 +20,7 @@ export default class App extends Component {
     filter: '',
   };
 
-  addContact = ({ name, phone }) => {
+  addContact = ({ name, number }) => {
     const { contacts } = this.state;
     const contact = contacts.find(contact => contact.name === name);
 
@@ -36,20 +38,44 @@ export default class App extends Component {
       return;
     }
 
-    const newContact = { id: nanoid(), name, phone };
+    const newContact = { id: nanoid(), name, number };
 
     this.setState(prevState => ({
       contacts: [...prevState.contacts, newContact],
     }));
-    console.log(contacts);
+  };
+
+  deleteContact = id => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== id),
+    }));
+  };
+
+  updateFilter = value => {
+    this.setState({ filter: value });
+  };
+
+  filteredContacts = () => {
+    const { filter } = this.state;
+    const normalizeFilter = filter.trim().toLowerCase();
+
+    return this.state.contacts.filter(({ name }) =>
+      name.toLowerCase().includes(normalizeFilter)
+    );
   };
 
   render() {
+    const { filter } = this.state;
     return (
       <Box p={3}>
         <MainHeader>Phonebook</MainHeader>
         <ContactForm onSubmit={this.addContact} />
         <SubHeader>Contacts</SubHeader>
+        <Filter filter={filter} onChange={this.updateFilter} />
+        <ContactList
+          contacts={this.filteredContacts()}
+          onDelete={this.deleteContact}
+        />
         <ToastContainer
           position="top-center"
           autoClose={1000}
