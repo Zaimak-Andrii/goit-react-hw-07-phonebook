@@ -1,10 +1,9 @@
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Component } from 'react';
 import { Box } from './Box';
 import ContactForm from './ContactForm';
 import { MainHeader, SubHeader } from './Typography';
-
-import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid';
 import ContactList from './ContactList';
 import Filter from './Filter';
@@ -68,14 +67,18 @@ export default class App extends Component {
     const { filter } = this.state;
     return (
       <Box p={3}>
-        <MainHeader>Phonebook</MainHeader>
+        <MainHeader mb={3}>Phonebook</MainHeader>
         <ContactForm onSubmit={this.addContact} />
-        <SubHeader>Contacts</SubHeader>
+
+        <SubHeader mt={3} mb={2}>
+          Contacts
+        </SubHeader>
         <Filter filter={filter} onChange={this.updateFilter} />
         <ContactList
           contacts={this.filteredContacts()}
           onDelete={this.deleteContact}
         />
+
         <ToastContainer
           position="top-center"
           autoClose={1000}

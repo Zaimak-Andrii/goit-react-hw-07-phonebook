@@ -1,5 +1,7 @@
-import { Form, Formik, Field, ErrorMessage } from 'formik';
+import FormInput from 'components/FormInput';
+import { Field, Formik } from 'formik';
 import { object, string } from 'yup';
+import { StyledFormButton, StyledForm } from './ContactForm.styled';
 import { ContactFormPropTypes } from './ContactForm.type';
 
 const initialValue = { name: '', number: '' };
@@ -20,40 +22,47 @@ const contactSchema = object({
     .required('Phone is a required'),
 });
 
-// TODO: Зробити окремий компонент для Input
 export default function ContactForm({ onSubmit }) {
+  const submitHandler = (values, actions) => {
+    onSubmit(values);
+    actions.resetForm();
+  };
+
   return (
     <Formik
       initialValues={initialValue}
       validationSchema={contactSchema}
-      onSubmit={(values, actions) => {
-        onSubmit(values);
-        actions.resetForm();
-      }}
+      onSubmit={submitHandler}
     >
-      <Form>
-        <label>
-          Name
+      {({ isValid, isSubmitting, dirty }) => (
+        <StyledForm autoComplete="off">
           <Field
-            type="text"
             name="name"
+            type="text"
+            component={FormInput}
             placeholder="Name"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          />
-          <ErrorMessage name="name" />
-        </label>
-        <label>
-          Phone number
+          >
+            Name
+          </Field>
           <Field
             type="tel"
             name="number"
+            component={FormInput}
             placeholder="Phone number"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          />
-          <ErrorMessage name="number" />
-        </label>
-        <button type="submit">Add contact</button>
-      </Form>
+          >
+            Phone number
+          </Field>
+
+          <StyledFormButton
+            type="submit"
+            disabled={!(isValid && dirty) || isSubmitting}
+          >
+            Add contact
+          </StyledFormButton>
+        </StyledForm>
+      )}
     </Formik>
   );
 }
