@@ -1,5 +1,5 @@
 import FormInput from 'components/FormInput';
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { object, string } from 'yup';
 import { StyledFormButton, StyledForm } from './ContactForm.styled';
 import { ContactFormPropTypes } from './ContactForm.type';
@@ -35,7 +35,7 @@ export default function ContactForm({ onSubmit }) {
       onSubmit={submitHandler}
     >
       {({ isValid, isSubmitting, dirty }) => (
-        <StyledForm autoComplete="off">
+        <StyledForm as={Form} autoComplete="off">
           <Field
             name="name"
             type="text"

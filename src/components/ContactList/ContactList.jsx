@@ -1,22 +1,33 @@
+import { SubHeader } from 'components/Typography';
+import { RiDeleteBack2Line } from 'react-icons/ri';
+import {
+  StyledContactList,
+  StyledContactListButton,
+  StyledContactListItem,
+} from './ContactList.styled';
 import { ContactListPropTypes } from './ContactList.type';
 
 export default function ContactList({ contacts, onDelete }) {
+  if (contacts.length === 0) {
+    return <SubHeader mt={3}>The contact list is empty</SubHeader>;
+  }
+
   return (
-    <ul>
+    <StyledContactList mt={3}>
       {contacts.map(({ id, name, number }) => (
-        <li key={id}>
+        <StyledContactListItem key={id}>
           {name}: {number}
-          <button
+          <StyledContactListButton
             type="button"
             onClick={() => {
               onDelete(id);
             }}
           >
-            Delete
-          </button>
-        </li>
+            <RiDeleteBack2Line fill="red" />
+          </StyledContactListButton>
+        </StyledContactListItem>
       ))}
-    </ul>
+    </StyledContactList>
   );
 }
 

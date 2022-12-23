@@ -1,7 +1,6 @@
-import { Form } from 'formik';
 import styled from 'styled-components';
 
-export const StyledForm = styled(Form)`
+export const StyledForm = styled.form`
   min-width: 350px;
   width: fit-content;
   padding: ${({ theme }) => `${theme.space[3]}px`};
@@ -14,6 +13,7 @@ export const StyledFormButton = styled.button`
   display: block;
 
   margin-left: auto;
+  margin-top: ${({ theme }) => `${theme.space[4]}px`};
   padding: ${({ theme }) => `${theme.space[2]}px ${theme.space[4]}px`};
 
   color: ${({ theme }) => theme.colors.form.text};

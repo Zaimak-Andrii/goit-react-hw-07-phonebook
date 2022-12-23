@@ -17,10 +17,13 @@ export const StyledFormLabel = styled.label`
   display: block;
 
   width: 100%;
-  margin-bottom: ${({ theme }) => `${theme.space[4]}px`};
 
   font-size: ${({ theme }) => theme.fontSizes.formLabel};
   color: ${({ theme }) => theme.colors.form.text};
+
+  &:not(:first-child) {
+    margin-top: ${({ theme }) => `${theme.space[4]}px`};
+  }
 `;
 
 export const StyledFormInput = styled.input`
