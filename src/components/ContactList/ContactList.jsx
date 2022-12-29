@@ -22,6 +22,7 @@ export default function ContactList({ contacts, onDelete }) {
             onClick={() => {
               onDelete(id);
             }}
+            aria-label="delete contact button"
           >
             <RiDeleteBack2Line fill="red" />
           </StyledContactListButton>
