@@ -1,10 +1,11 @@
 import FormInput from 'components/FormInput';
-import { useFormik } from 'formik';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
 import { StyledFormButton, StyledForm } from './ContactForm.styled';
 import { ContactFormPropTypes } from './ContactForm.type';
 
-const initialValue = { name: '', number: '' };
+const initialValues = { name: '', number: '' };
 const inputs = [
   {
     name: 'name',
@@ -41,40 +42,33 @@ const contactSchema = object({
 });
 
 export default function ContactForm({ onSubmit }) {
-  const formik = useFormik({
-    initialValues: initialValue,
-    validationSchema: contactSchema,
-    onSubmit: submitHandler,
-  });
   const {
+    register,
     handleSubmit,
-    isValid,
-    dirty,
-    isSubmitting,
-    handleChange,
-    handleBlur,
-    values,
-    touched,
-    errors,
-  } = formik;
+    reset,
+    formState: { errors, isDirty, isValid, isSubmitting, touchedFields },
+  } = useForm({
+    // Для того щоб, перевірка поля відбувалася при зміні значення поля.
+    mode: 'onChange',
+    defaultValues: initialValues,
+    resolver: yupResolver(contactSchema),
+  });
 
-  function submitHandler(values, actions) {
-    onSubmit(values);
-    actions.resetForm();
-  }
+  const submitHandler = (data, evt) => {
+    onSubmit(data);
+    reset();
+  };
 
   return (
-    <StyledForm onSubmit={handleSubmit} autoComplete="off">
+    <StyledForm onSubmit={handleSubmit(submitHandler)} autoComplete="off">
       {inputs.map(({ label, ...otherProps }) => {
         const { name } = otherProps;
         return (
           <FormInput
             key={name}
             {...otherProps}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values[name]}
-            touched={touched[name]}
+            {...register(name)}
+            touched={touchedFields[name]}
             error={errors[name]}
           >
             {label}
@@ -84,7 +78,7 @@ export default function ContactForm({ onSubmit }) {
 
       <StyledFormButton
         type="submit"
-        disabled={!(isValid && dirty) || isSubmitting}
+        disabled={!(isValid && isDirty) || isSubmitting}
       >
         Add contact
       </StyledFormButton>
