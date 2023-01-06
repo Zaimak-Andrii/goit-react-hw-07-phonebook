@@ -1,9 +1,10 @@
-import FormInput from 'components/FormInput';
+import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
+import FormInput from 'components/FormInput';
 import { StyledFormButton, StyledForm } from './ContactForm.styled';
-import { ContactFormPropTypes } from './ContactForm.type';
+import { addContact } from 'redux/contacts.slice';
 
 const initialValues = { name: '', number: '' };
 const inputs = [
@@ -41,7 +42,8 @@ const contactSchema = object({
     .required('Phone is a required'),
 });
 
-export default function ContactForm({ onSubmit }) {
+export default function ContactForm() {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -54,8 +56,8 @@ export default function ContactForm({ onSubmit }) {
     resolver: yupResolver(contactSchema),
   });
 
-  const submitHandler = (data, evt) => {
-    onSubmit(data);
+  const submitHandler = data => {
+    dispatch(addContact(data));
     reset();
   };
 
@@ -85,5 +87,3 @@ export default function ContactForm({ onSubmit }) {
     </StyledForm>
   );
 }
-
-ContactForm.propTypes = ContactFormPropTypes;
