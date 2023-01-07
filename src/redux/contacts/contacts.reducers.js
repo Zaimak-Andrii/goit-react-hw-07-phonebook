@@ -13,7 +13,7 @@ import {
 
 const list = createReducer([], {
   [fetchContactsSuccess]: (_, { payload }) => payload,
-  [addContactSuccess]: (state, { payload }) => [...payload, ...state],
+  [addContactSuccess]: (state, { payload }) => [payload, ...state],
   [removeContactSuccess]: (state, { payload }) => state.filter(({ id }) => id !== payload.id),
 });
 

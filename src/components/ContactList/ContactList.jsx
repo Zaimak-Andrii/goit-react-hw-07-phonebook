@@ -2,29 +2,30 @@ import { SubHeader } from 'components/Typography';
 import { useEffect } from 'react';
 import { RiDeleteBack2Line } from 'react-icons/ri';
 import { useSelector, useDispatch } from 'react-redux';
-import { contactsOperations } from 'redux/contacts';
-import { StyledContactList, StyledContactListButton, StyledContactListItem } from './ContactList.styled';
-
-const getFilteredContacts = (contacts, filterStr) =>
-  filterStr.length === 0 ? contacts : contacts.filter(({ name }) => name.toLowerCase().includes(filterStr));
+import { contactsOperations, contactsSelectors } from 'redux/contacts';
+import { filterSelectors } from 'redux/filter';
+import {
+  StyledContactList,
+  StyledContactListButton,
+  StyledContactListItem,
+} from './ContactList.styled';
 
 export default function ContactList() {
-  const { list } = useSelector(state => state.contacts);
-  const filter = useSelector(state => state.filter);
+  const list = useSelector(contactsSelectors.selectFilteredContacts);
+  const filter = useSelector(filterSelectors.selectFilter);
   const dispatch = useDispatch();
-  const filtredContacts = getFilteredContacts(list, filter);
 
   useEffect(() => {
     dispatch(contactsOperations.getContacts());
   }, [dispatch]);
 
-  if (list.length === 0) {
+  if (list.length === 0 && filter.length === 0) {
     return <SubHeader mt={3}>The contact list is empty</SubHeader>;
   }
 
   return (
     <StyledContactList mt={3}>
-      {filtredContacts.map(({ id, name, number }) => (
+      {list.map(({ id, name, number }) => (
         <StyledContactListItem key={id}>
           {name}: {number}
           <StyledContactListButton

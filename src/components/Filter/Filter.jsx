@@ -1,10 +1,10 @@
 import { StyledForm } from 'components/ContactForm/ContactForm.styled';
 import { StyledFormInput, StyledFormLabel } from 'components/FormInput/FormInput.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { filterActions } from 'redux/filter';
+import { filterActions, filterSelectors } from 'redux/filter';
 
 export default function Filter() {
-  const filter = useSelector(state => state.filter);
+  const filter = useSelector(filterSelectors.selectFilter);
   const dispatch = useDispatch();
   return (
     <StyledForm>

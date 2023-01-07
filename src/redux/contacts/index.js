@@ -1,3 +1,4 @@
 export * as contactsActions from './contacts.actions';
-export { default as contactsReducer } from './contacts.reducers';
+export * as contactsSelectors from './contacts.selectors';
 export * as contactsOperations from './contacts.operations';
+export { default as contactsReducer } from './contacts.reducers';
