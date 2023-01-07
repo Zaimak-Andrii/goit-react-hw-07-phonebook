@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
 import FormInput from 'components/FormInput';
 import { StyledFormButton, StyledForm } from './ContactForm.styled';
-import { addContact } from 'redux/contacts.slice';
+import { contactsOperations } from 'redux/contacts';
 
 const initialValues = { name: '', number: '' };
 const inputs = [
@@ -21,8 +21,7 @@ const inputs = [
     type: 'tel',
     label: 'Phone number',
     placeholder: 'Phone number',
-    title:
-      'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +',
+    title: 'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +',
   },
 ];
 const contactSchema = object({
@@ -57,7 +56,7 @@ export default function ContactForm() {
   });
 
   const submitHandler = data => {
-    dispatch(addContact(data));
+    dispatch(contactsOperations.addContact(data));
     reset();
   };
 
@@ -66,22 +65,13 @@ export default function ContactForm() {
       {inputs.map(({ label, ...otherProps }) => {
         const { name } = otherProps;
         return (
-          <FormInput
-            key={name}
-            {...otherProps}
-            {...register(name)}
-            touched={touchedFields[name]}
-            error={errors[name]}
-          >
+          <FormInput key={name} {...otherProps} {...register(name)} touched={touchedFields[name]} error={errors[name]}>
             {label}
           </FormInput>
         );
       })}
 
-      <StyledFormButton
-        type="submit"
-        disabled={!(isValid && isDirty) || isSubmitting}
-      >
+      <StyledFormButton type="submit" disabled={!(isValid && isDirty) || isSubmitting}>
         Add contact
       </StyledFormButton>
     </StyledForm>

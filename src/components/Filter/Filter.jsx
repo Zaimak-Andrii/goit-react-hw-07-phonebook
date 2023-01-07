@@ -1,13 +1,10 @@
 import { StyledForm } from 'components/ContactForm/ContactForm.styled';
-import {
-  StyledFormInput,
-  StyledFormLabel,
-} from 'components/FormInput/FormInput.styled';
+import { StyledFormInput, StyledFormLabel } from 'components/FormInput/FormInput.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFilter, updateFilter } from 'redux/contacts.slice';
+import { filterActions } from 'redux/filter';
 
 export default function Filter() {
-  const filter = useSelector(getFilter);
+  const filter = useSelector(state => state.filter);
   const dispatch = useDispatch();
   return (
     <StyledForm>
@@ -18,7 +15,7 @@ export default function Filter() {
           name="filter"
           value={filter}
           onChange={evt => {
-            dispatch(updateFilter({ value: evt.target.value }));
+            dispatch(filterActions.updateFilter(evt.target.value));
           }}
           placeholder="Search..."
         />

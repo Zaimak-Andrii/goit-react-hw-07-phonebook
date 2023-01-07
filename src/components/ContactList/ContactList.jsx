@@ -1,24 +1,24 @@
 import { SubHeader } from 'components/Typography';
+import { useEffect } from 'react';
 import { RiDeleteBack2Line } from 'react-icons/ri';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  StyledContactList,
-  StyledContactListButton,
-  StyledContactListItem,
-} from './ContactList.styled';
-import { removeContact } from 'redux/contacts.slice';
+import { contactsOperations } from 'redux/contacts';
+import { StyledContactList, StyledContactListButton, StyledContactListItem } from './ContactList.styled';
 
 const getFilteredContacts = (contacts, filterStr) =>
-  filterStr.length === 0
-    ? contacts
-    : contacts.filter(({ name }) => name.toLowerCase().includes(filterStr));
+  filterStr.length === 0 ? contacts : contacts.filter(({ name }) => name.toLowerCase().includes(filterStr));
 
 export default function ContactList() {
-  const { contacts, filter } = useSelector(state => state.contacts);
+  const { list } = useSelector(state => state.contacts);
+  const filter = useSelector(state => state.filter);
   const dispatch = useDispatch();
-  const filtredContacts = getFilteredContacts(contacts, filter);
+  const filtredContacts = getFilteredContacts(list, filter);
 
-  if (contacts.length === 0) {
+  useEffect(() => {
+    dispatch(contactsOperations.getContacts());
+  }, [dispatch]);
+
+  if (list.length === 0) {
     return <SubHeader mt={3}>The contact list is empty</SubHeader>;
   }
 
@@ -30,7 +30,7 @@ export default function ContactList() {
           <StyledContactListButton
             type="button"
             onClick={() => {
-              dispatch(removeContact({ id }));
+              dispatch(contactsOperations.removeContact(id));
             }}
             aria-label="delete contact button"
           >
