@@ -1,6 +1,6 @@
 export const fetchStatus = {
   IDLE: 'idle',
   PENDING: 'pending',
-  FULFILledD: 'fulfilled',
+  FULFILLED: 'fulfilled',
   REJECTED: 'rejected',
 };
